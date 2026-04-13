@@ -48,6 +48,11 @@ The implementation phase has started and includes:
 * Streamlit
 * Matplotlib
 
+## Setup
+
+To run this project locally:
+
+pip install -r requirements.txt
 ---
 
 ## How to Run the Dashboard
