@@ -8,31 +8,37 @@ Online Retail
 
 Online Retail II dataset from UCI
 
-## About the Project
+## Project Overview
 
-This project focuses on analyzing customer purchase data to better understand customer behavior.
+This project focuses on analyzing customer purchasing behavior in an online retail business.
 
-First, the dataset was cleaned and missing values were handled. Then, a new feature called **TotalPrice** was created to represent the total cost of each transaction.
+The main objective is to understand customer patterns and perform customer segmentation to support better marketing strategies and business decisions.
 
-After that, **K-Means clustering** was applied to segment customers into different groups based on their purchasing behavior. A classification model was also built to predict the customer segment.
+---
 
-Finally, a simple interactive dashboard was created using Streamlit to visualize the results.
+## Phase 1 (Understanding & Planning)
 
-## Dashboard
+In this phase, the project focused on:
 
-A simple dashboard was built using Streamlit to explore customer segmentation.
+* Understanding the business problem
+* Exploring the dataset and identifying data issues
+* Planning the workflow using CRISP-DM methodology
+* Selecting appropriate data mining techniques
 
-It includes:
+---
 
-* Customer distribution across clusters
-* Average spending per cluster
-* Key metrics such as total customers and spending
+## Phase 2 (Implementation - In Progress)
 
-To run the dashboard locally:
+The implementation phase has started and includes:
 
-```bash
-streamlit run dashboard/app.py
-```
+* Data cleaning and preprocessing
+* Feature engineering (TotalPrice)
+* Customer-level aggregation
+* Applying K-Means clustering
+* Building a classification model
+* Creating a basic Streamlit dashboard
+
+---
 
 ## Tools Used
 
@@ -40,10 +46,17 @@ streamlit run dashboard/app.py
 * Pandas
 * Scikit-learn
 * Streamlit
+* Matplotlib
 
-## Conclusion
+---
 
-The project shows how data mining techniques can help in understanding customer behavior and supporting business decisions.
+## How to Run the Dashboard
+
+```bash
+streamlit run dashboard/app.py
+```
+
+---
 
 ## Author
 
