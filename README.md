@@ -16,7 +16,23 @@ First, the dataset was cleaned and missing values were handled. Then, a new feat
 
 After that, **K-Means clustering** was applied to segment customers into different groups based on their purchasing behavior. A classification model was also built to predict the customer segment.
 
-Finally, a simple interactive dashboard was created using Streamlit to visualize the results and make them easier to understand.
+Finally, a simple interactive dashboard was created using Streamlit to visualize the results.
+
+## Dashboard
+
+A simple dashboard was built using Streamlit to explore customer segmentation.
+
+It includes:
+
+* Customer distribution across clusters
+* Average spending per cluster
+* Key metrics such as total customers and spending
+
+To run the dashboard locally:
+
+```bash
+streamlit run dashboard/app.py
+```
 
 ## Tools Used
 
