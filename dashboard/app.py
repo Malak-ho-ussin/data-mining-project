@@ -2,60 +2,104 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# read data
+# ================= Load Data =================
 df = pd.read_csv('notebooks/customers_clustered.csv')
 
-# title
+# ================= Sidebar Filters =================
+st.sidebar.header("Filters")
+
+# Cluster filter
+selected_cluster = st.sidebar.selectbox(
+    "Select Cluster",
+    sorted(df['Cluster'].unique())
+)
+
+# Spending range filter
+min_spend = int(df['TotalPrice'].min())
+max_spend = int(df['TotalPrice'].max())
+
+spend_range = st.sidebar.slider(
+    "Select Spending Range",
+    min_spend,
+    max_spend,
+    (min_spend, max_spend)
+)
+
+# Apply filters
+filtered_df = df[
+    (df['Cluster'] == selected_cluster) &
+    (df['TotalPrice'] >= spend_range[0]) &
+    (df['TotalPrice'] <= spend_range[1])
+]
+
+# ================= Title =================
 st.title("Customer Segmentation Dashboard")
+st.write("Interactive dashboard for analyzing customer behavior.")
 
-st.write("Simple dashboard to explore customer groups based on their purchases.")
+st.write(f"Showing Cluster: {selected_cluster} | Spending Range: {spend_range}")
 
-# basic info
+# ================= KPIs =================
 st.subheader("Quick Info")
 
 col1, col2, col3 = st.columns(3)
 
-col1.write("Total Customers")
-col1.write(len(df))
+col1.metric("Total Customers", len(filtered_df))
+col2.metric("Average Spending", round(filtered_df['TotalPrice'].mean(), 2))
+col3.metric("Max Spending", round(filtered_df['TotalPrice'].max(), 2))
 
-col2.write("Avg Spending")
-col2.write(round(df['TotalPrice'].mean(), 2))
+# ================= Cluster Distribution =================
+st.subheader("Cluster Distribution")
 
-col3.write("Max Spending")
-col3.write(round(df['TotalPrice'].max(), 2))
+counts = filtered_df['Cluster'].value_counts().sort_index()
 
-# preview
-st.subheader("Data Preview")
-st.write(df.head())
+fig1, ax1 = plt.subplots()
+counts.plot(kind='bar', ax=ax1)
 
-# cluster distribution
-st.subheader("Clusters Distribution")
+ax1.set_xlabel("Cluster")
+ax1.set_ylabel("Number of Customers")
+ax1.set_title("Customer Distribution")
 
-counts = df['Cluster'].value_counts().sort_index()
-st.bar_chart(counts)
+st.pyplot(fig1)
 
-# grouping
-st.subheader("Cluster Summary")
-
-grouped = df.groupby('Cluster')[['Invoice', 'Quantity', 'TotalPrice']].mean()
-st.write(grouped)
-
-# plot
+# ================= Spending per Cluster =================
 st.subheader("Spending by Cluster")
 
-fig, ax = plt.subplots()
-grouped['TotalPrice'].plot(kind='bar', ax=ax)
+grouped = filtered_df.groupby('Cluster')[['Invoice', 'Quantity', 'TotalPrice']].mean()
 
-ax.set_xlabel("Cluster")
-ax.set_ylabel("Total Price")
+fig2, ax2 = plt.subplots()
+grouped['TotalPrice'].plot(kind='bar', ax=ax2)
 
-st.pyplot(fig)
+ax2.set_xlabel("Cluster")
+ax2.set_ylabel("Average Spending")
+ax2.set_title("Average Spending per Cluster")
 
-# notes
-st.subheader("Notes")
+st.pyplot(fig2)
+
+# ================= Spending Distribution =================
+st.subheader("Spending Distribution")
+
+fig3, ax3 = plt.subplots()
+ax3.hist(filtered_df['TotalPrice'], bins=20)
+
+ax3.set_xlabel("Total Price")
+ax3.set_ylabel("Frequency")
+ax3.set_title("Customer Spending Distribution")
+
+st.pyplot(fig3)
+
+# ================= Data Preview =================
+st.subheader("Data Preview")
+st.dataframe(filtered_df.head())
+
+# ================= Summary =================
+st.subheader("Cluster Summary")
+st.dataframe(grouped)
+
+# ================= Insights =================
+st.subheader("Business Insights")
 
 st.write("""
-- Most customers are in the low spending group.
-- Few customers spend much more than others.
-- This can help in targeting customers differently.
+- Most customers fall into lower spending segments.
+- High-value customers are fewer but contribute significantly.
+- Filters allow deeper exploration of customer groups.
 """)
